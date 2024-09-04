@@ -9,9 +9,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json()); //middleware
+app.use(express.urlencoded({extended:true})); // to parse data (url encoded)
 
-
-app.use("/api/auth",authRoutes); //middleware
+app.use("/api/auth",authRoutes); //middleware to parse req.body
 
 app.get("/",(req,res)=>{
     res.send("server is ready");
