@@ -50,7 +50,7 @@ export const signup =async (req,res) => {
                 following: newUser.following,
                 profileImg:newUser.profileImg,
                 coverImg:newUser.coverImg,
-            })
+            });
         }else{
             
             return res.status(400).json({error: "invalid user data"});
@@ -64,9 +64,24 @@ export const signup =async (req,res) => {
 
 export const login =async (req,res) => {
     console.log("inside sign up");
-    res.json({
-        data:"you hit the login endpoint",
-    });
+    const {username , password } = req.body;
+
+    const existingUser = await User.findOne({username})
+    if(existingUser){
+        User.find({username:username});
+        console.log("the name is:" + username + password);
+        const enteredPwd = await User.findOne({username:username},{username, password});
+        console.log("password is "+ enteredPwd.password );
+        if(password == enteredPwd.password){
+            console.log("password matches" );
+            generateTokenAndSetCookie(enteredPwd._id,res);
+            res.status(201).json({
+                _id: enteredPwd._id,
+                username: enteredPwd.username,
+            });
+        }
+
+    }
 }
 
 export const logout =async (req,res) => {
