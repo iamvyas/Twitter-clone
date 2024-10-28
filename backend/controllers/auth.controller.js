@@ -63,24 +63,34 @@ export const signup =async (req,res) => {
 }
 
 export const login =async (req,res) => {
-    console.log("inside sign up");
-    const {username , password } = req.body;
+    try{
+        console.log("inside login");
+        const {username , password } = req.body;
 
-    const existingUser = await User.findOne({username})
-    if(existingUser){
-        User.find({username:username});
-        console.log("the name is:" + username + password);
-        const enteredPwd = await User.findOne({username:username},{username, password});
-        console.log("password is "+ enteredPwd.password );
-        if(password == enteredPwd.password){
-            console.log("password matches" );
-            generateTokenAndSetCookie(enteredPwd._id,res);
-            res.status(201).json({
-                _id: enteredPwd._id,
-                username: enteredPwd.username,
-            });
+        const existingUser = await User.findOne({username});
+        const isPasswordCorrect = await bcrypt.compare(password, existingUser?.password || "");
+        
+        if(!existingUser || !isPasswordCorrect){
+            console.log("invalid username or password");
+            return res.status(400).json({error:"Invalid username or password"});
         }
+        
+        generateTokenAndSetCookie(existingUser._id,res);
 
+        res.status(200).json({
+            _id: existingUser._id,
+                username: existingUser.fullName,
+                email: existingUser.email,
+                followers: existingUser.followers,
+                following: existingUser.following,
+                profileImg:existingUser.profileImg,
+                coverImg:existingUser.coverImg,
+
+        });
+    }
+    catch(error){
+        console.log("error in login controller",error.message);
+        return res.status(500).json({error: "internal server error"});
     }
 }
 
