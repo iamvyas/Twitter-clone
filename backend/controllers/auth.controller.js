@@ -101,8 +101,19 @@ export const logout =async (req,res) => {
         res.status(200).json({message:"logged out successfully"});
     }
     catch(error){
-        console.log("error in logut controller",error.message);
+        console.log("error in logout controller",error.message);
         return res.status(500).json({error: "internal server error"});
     }
     
+}
+
+export const getMe = async (req, res)=> {
+    try{
+        const user = await User.findById(req.user._id).select("-password");  //if we alreaady filtered password there why specify another time here?
+        res.status(200).json(user);
+    }
+    catch(error){
+        console.log("error in getMe ",error.message);
+        return res.status(500).json({error: "internal server error"});
+    }
 }
