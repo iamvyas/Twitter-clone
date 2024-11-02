@@ -1,5 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes.js" //.js needed since we use modules
+import userRoutes from "./routes/user.routes.js" 
 import dotenv from "dotenv";
 
 import connectMongoDB from './db/connectMongoDB.js';
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended:true})); // to parse data (url encoded)
 app.use(cookieParser());  //use this to parse the request and get cookie
 
 app.use("/api/auth",authRoutes); //middleware to parse req.body
+app.use("/api/users",userRoutes);
 
 app.get("/",(req,res)=>{
     res.send("server is ready");
