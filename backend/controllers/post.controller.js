@@ -1,6 +1,6 @@
 import User from '../models/user.model.js';
 import Post from '../models/post.model.js';
-
+import Notification from '../models/notification.model.js';
 export const createPost = async(req , res) => {
     try {
         console.log("entering post create");
@@ -28,7 +28,7 @@ export const createPost = async(req , res) => {
         res.status(500).json({error:"internal server error"});
         console.log("Error in creation controller:",error);
     }
-}
+};
 
 export const deletePost = async(req , res) => {
     try{
@@ -49,7 +49,7 @@ export const deletePost = async(req , res) => {
         res.status(500).json({error:"internal server error"});
         console.log("Error in delete post controller:",error);
     }
-}
+};
 
 export const commentOnPost = async(req, res) => {
     try{
@@ -79,4 +79,62 @@ export const commentOnPost = async(req, res) => {
         res.status(500).json({error:"internal server error"});
         console.log("Error in comment on post controller:",error);
     }
-}
+};
+
+export const likeUnlikePost = async(req, res) => {
+    try{
+        console.log("entering liking on post");
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        const post  = await Post.findById(postId);
+
+        if(!post){
+            res.status(400).json({error:"post not found"});
+        }
+
+        const userLikedPost = post.likes.includes(userId);
+        if(userLikedPost){
+            console.log("has already liked");
+            await Post.updateOne({_id:postId},{$pull:{likes:userId}});
+            res.status(200).json({message:"unliked"});
+        }
+        else{
+            console.log("heading to like");
+            post.likes.push(userId);
+            await post.save();
+            const notification = new Notification({
+                from: userId,
+                to: post.user,
+                type:"like"
+            })
+            await notification.save();
+            res.status(200).json({message:"post liked successfully"});
+        }
+    }catch(error){
+        res.status(500).json({error:"internal server error"});
+        console.log("Error in likes controller :",error);
+    }
+};
+
+export const getAllPosts = async(req, res) => {
+    try{
+        const posts = await Post.find().sort({createdAt: -1}).populate({
+            path:"user",
+            select:"-password -email -createdAt -updatedAt",
+        })
+        .populate({
+            path:"comments.user",
+            select:"-password -email -createdAt -updatedAt",
+        });
+
+        if(posts.length === 0){
+            return res.status(200).json([]);
+        }
+
+        res.status(200).json(posts);
+    }catch(error){
+        res.status(500).json({error:"internal server error"});
+        console.log("Error in comment on get all posts:",error);
+    }
+};
