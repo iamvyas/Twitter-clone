@@ -47,6 +47,13 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:"",
     },
+    likedPosts:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Post",
+            default:[],
+        }
+    ]
 },{timestamps: true}); // time stamp used to display how old the acc is
 
 
