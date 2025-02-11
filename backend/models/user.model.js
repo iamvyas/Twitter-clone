@@ -57,6 +57,7 @@ const userSchema = new mongoose.Schema({
 },{timestamps: true}); // time stamp used to display how old the acc is
 
 
-const User = mongoose.model("User",userSchema);
+const User = mongoose.model("User",userSchema); 
+//gets in the db name and the schema...ig the schema has been changed , it will update itself in the db
 
 export default User;
