@@ -1,6 +1,13 @@
+import { useState } from "react";
+import LoginForm from "./LoginForm";
+
 const LoginPage = () => {
-    console.log("has already liked");
-    return <div>Login Page</div>
+    
+    return (
+        <div className="login-page">
+            <LoginForm />
+        </div>
+    );
 };
 
 export default LoginPage;
