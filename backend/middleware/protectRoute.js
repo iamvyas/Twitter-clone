@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const protectRoute = async (req,res,next) => {
     try{
+        //console.log("inside protect route check");
         //we are getting token from cookies
         const token = req.cookies.jwt; //we need to add another m/w cookieparser needed in server.js
         if(!token){

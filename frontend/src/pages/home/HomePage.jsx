@@ -4,26 +4,39 @@ import Cookies from "js-cookie"; // Only needed if using cookies
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
+  const [tweets, setTweets] = useState(null);
   const navigate = useNavigate();
+  
+  useEffect(() =>{
+    fetchUserDetails();
+  }) 
+  
+  const handleLogout = async () => {
+    try {
+      console.log("pre axios log out");
+      
 
-  useEffect(() => {
-    // Check for user authentication
-    const storedUser = localStorage.getItem("user"); // For LocalStorage-based auth
-    const token = Cookies.get("token"); // For Cookie-based auth
-
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else if (token) {
-      // If using JWT cookies, fetch user details from backend
-      fetchUserDetails();
-    } else {
-      navigate("/login"); // Redirect to login if not authenticated
+      const response = await fetch("http://localhost:5000/api/auth/logout", {
+        method: "GET",
+        credentials: "include", // Important for sending cookies
+      });
+      console.log("post axios log out");
+      // Clear user state
+      setUser(null);
+      navigate("/login"); // Redirect to login after logout
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
-  }, [navigate]);
+  };
 
   const fetchUserDetails = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/user", {
+      const response = await fetch("http://localhost:5000/api/auth/me", {
+        method: "GET",
+        credentials: "include", // Important for sending cookies
+      });
+    
+      const responseTweets = await fetch("http://localhost:5000/api/posts/all", {
         method: "GET",
         credentials: "include", // Important for sending cookies
       });
@@ -31,7 +44,9 @@ const HomePage = () => {
       if (!response.ok) throw new Error("Unauthorized");
 
       const data = await response.json();
+      const dataTweets = await responseTweets.json();
       setUser(data);
+      setTweets(dataTweets);
     } catch (error) {
       navigate("/login"); // Redirect if unauthorized
     }
@@ -44,13 +59,18 @@ const HomePage = () => {
         <div>
           <p><strong>Username:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
-          <button onClick={() => {
-            localStorage.removeItem("user"); // Clear LocalStorage
-            Cookies.remove("token"); // Remove Cookie
-            navigate("/login");
-          }}>
+          <button onClick={handleLogout}>
             Logout
           </button>
+          <br />
+          <div className="p-4 space-y-4">
+      {tweets.map((post) => (
+        <div key={post._id} >
+          <p>Username: {post.user.username}</p>
+          <p>Text: {post.text}</p>
+        </div>
+      ))}
+    </div>
         </div>
       ) : (
         <p>Loading user data...</p>

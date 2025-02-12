@@ -108,7 +108,7 @@ export const logout =async (req,res) => {
 }
 
 export const getMe = async (req, res)=> {
-    try{
+    try{console.log("inside getMe ");
         const user = await User.findById(req.user._id).select("-password");  //if we alreaady filtered password there why specify another time here?
         res.status(200).json(user);
     }
