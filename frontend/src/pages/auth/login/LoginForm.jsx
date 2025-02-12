@@ -29,9 +29,9 @@ const LoginForm = () => {
       const { username, email } = response.data;
 
       // Save user info in localStorage
-      localStorage.setItem("user", JSON.stringify({ username, email }));
+      //localStorage.setItem("user", JSON.stringify({ username, email }));
 
-      alert(`Login successful!\nUsername: ${username}\nEmail: ${email}`);
+      //alert(`Login successful!\nUsername: ${username}\nEmail: ${email}`);
 
       navigate("/"); // Redirect to Homepage
     } catch (err) {

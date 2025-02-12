@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"; // Only needed if using cookies
+import HandleLogout from "../auth/logout/LogOut";
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
@@ -10,7 +11,7 @@ const HomePage = () => {
   useEffect(() =>{
     fetchUserDetails();
   }) 
-  
+  /*
   const handleLogout = async () => {
     try {
       console.log("pre axios log out");
@@ -28,7 +29,7 @@ const HomePage = () => {
       console.error("Logout failed:", err);
     }
   };
-
+  */
   const fetchUserDetails = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/auth/me", {
@@ -59,9 +60,7 @@ const HomePage = () => {
         <div>
           <p><strong>Username:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
-          <button onClick={handleLogout}>
-            Logout
-          </button>
+          <HandleLogout />
           <br />
           <div className="p-4 space-y-4">
       {tweets.map((post) => (
