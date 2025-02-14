@@ -5,14 +5,14 @@ const SuggestedUser = ()=>{
     const [sUser, setUser] = useState(null);
     useEffect(() =>{
         fetchUserDetails();
-      })
+      }, [])
       const updateFunction = async (userF) => {
         
         const sUsers = await fetch("http://localhost:5000/api/users/follow/"+userF, {
             method: "POST",
             credentials: "include", // Important for sending cookies
           });
-
+          fetchUserDetails();
           console.log("follow success");
       }
       const fetchUserDetails = async () => {

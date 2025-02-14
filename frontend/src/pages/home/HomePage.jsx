@@ -11,7 +11,7 @@ const HomePage = () => {
   
   useEffect(() =>{
     fetchUserDetails();
-  }) 
+  }, []) 
   /*
   const handleLogout = async () => {
     try {
@@ -55,9 +55,8 @@ const HomePage = () => {
   };
 
   return (
-    <div className="homepage">
-      <h2>Welcome to Homepage</h2> <HandleLogout /> 
-      <PostTweet />
+    <div className="homepage"> 
+      <PostTweet onTweetPosted={fetchUserDetails} />
       {user ? (
         <div>
           <p><strong>Username:</strong> {user.username}</p>

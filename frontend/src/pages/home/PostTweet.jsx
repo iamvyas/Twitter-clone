@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
-const PostTweet = () => {
+const PostTweet = ({ onTweetPosted }) => {
   const [formData, setFormData] = useState({
     text: "",
   });
@@ -29,7 +29,7 @@ const PostTweet = () => {
       //const { username, email } = response.data;
 
       alert("Tweet posted successfully");
-
+      onTweetPosted();
       navigate("/"); // Redirect to Homepage
     } catch (err) {
       setError(err.response?.data?.message || "tweet failed");
