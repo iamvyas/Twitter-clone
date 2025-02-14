@@ -2,10 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+
+const PostTweet = () => {
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    text: "",
   });
 
   const [error, setError] = useState("");
@@ -22,20 +22,17 @@ const LoginForm = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData, {
+      const response = await axios.post("http://localhost:5000/api/posts/create", formData, {
         withCredentials: true,
       });
 
-      const { username, email } = response.data;
+      //const { username, email } = response.data;
 
-      // Save user info in localStorage
-      //localStorage.setItem("user", JSON.stringify({ username, email }));
-
-      //alert(`Login successful!\nUsername: ${username}\nEmail: ${email}`);
+      alert("Tweet posted successfully");
 
       navigate("/"); // Redirect to Homepage
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "tweet failed");
     } finally {
       setLoading(false);
     }
@@ -43,21 +40,16 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="login-form">
-      <h2>Login 2</h2>
       {error && <p className="error">{error}</p>}
       <div>
-        <label>Username:</label>
-        <input type="text" name="username" value={formData.username} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+        <label>Tweet Something:</label>
+        <input type="text" name="text" value={formData.text} onChange={handleChange} required />
       </div>
       <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
+        {loading ? "Posting" : "Tweet"}
       </button>
     </form>
   );
 };
 
-export default LoginForm;
+export default PostTweet;

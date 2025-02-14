@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"; // Only needed if using cookies
 import HandleLogout from "../auth/logout/LogOut";
+import PostTweet from "./PostTweet";
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
@@ -55,12 +56,13 @@ const HomePage = () => {
 
   return (
     <div className="homepage">
-      <h2>Welcome to Homepage</h2>
+      <h2>Welcome to Homepage</h2> <HandleLogout /> 
+      <PostTweet />
       {user ? (
         <div>
           <p><strong>Username:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
-          <HandleLogout />
+          
           <br />
           <div className="tweetbox">
       {tweets.map((post) => (
