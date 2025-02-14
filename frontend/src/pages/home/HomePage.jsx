@@ -62,11 +62,11 @@ const HomePage = () => {
           <p><strong>Email:</strong> {user.email}</p>
           <HandleLogout />
           <br />
-          <div className="p-4 space-y-4">
+          <div className="tweetbox">
       {tweets.map((post) => (
         <div key={post._id} >
-          <p>Username: {post.user.username}</p>
-          <p>Text: {post.text}</p>
+          <p>{post.user.fullName} @{post.user.username}</p>
+          <p>{post.text}</p>
         </div>
       ))}
     </div>
