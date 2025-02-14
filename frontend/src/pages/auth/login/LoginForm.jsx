@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState , useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../../GlobalContext";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  let {authStatus, authStatusLoader} = useContext(GlobalContext);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ const LoginForm = () => {
       });
 
       const { username, email } = response.data;
-
+      authStatusLoader(true);
       // Save user info in localStorage
       //localStorage.setItem("user", JSON.stringify({ username, email }));
 
@@ -43,7 +46,8 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="login-form">
-      <h2>Login 2</h2>
+      <h1>TWITTER</h1>
+      <h2>Log In</h2>
       {error && <p className="error">{error}</p>}
       <div>
         <label>Username:</label>

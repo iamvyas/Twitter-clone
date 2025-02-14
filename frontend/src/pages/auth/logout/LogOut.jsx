@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState ,useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { GlobalContext } from "../../../GlobalContext";
 
 const HandleLogout = () => {
-
+    let {authStatus, authStatusLoader} = useContext(GlobalContext);
     const navigate = useNavigate();
     const handleLogout = async () => {
         try {
@@ -13,6 +13,7 @@ const HandleLogout = () => {
             credentials: "include", // Important for sending cookies
           });
           console.log("post axios log out");
+          authStatusLoader(false);
           // Clear user state
           navigate("/login"); // Redirect to login after logout
         } catch (err) {

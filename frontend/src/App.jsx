@@ -1,5 +1,5 @@
 import {Route , Routes} from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { useEffect, useState , useContext} from "react";
 import HomePage from './pages/home/HomePage';
 import LoginPage from './pages/auth/login/LoginPage';
 import SignUpPage from './pages/auth/signup/SignUpPage';
@@ -9,11 +9,11 @@ import NavBar from './pages/navbar/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { GlobalContext } from './GlobalContext';
 
 
 function App() {
-  let [authStatus, authStatusLoader] = useState(false);
-  
+  const {authStatus, authStatusLoader} = useContext(GlobalContext);
   useEffect(() =>{
     console.log("Running useEffect - Checking Auth...");
 
