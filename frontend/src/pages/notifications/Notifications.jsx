@@ -1,17 +1,15 @@
+import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"; // Only needed if using cookies
-import HandleLogout from "../auth/logout/LogOut";
-import PostTweet from "./PostTweet";
 
-const HomePage = () => {
+const Notifications = () => {
   const [user, setUser] = useState(null);
-  const [tweets, setTweets] = useState(null);
+  const [notif, setNotif] = useState(null);
   const navigate = useNavigate();
   
   useEffect(() =>{
     fetchUserDetails();
-  }, []) 
+  }, [location.pathname]) 
 
   const fetchUserDetails = async () => {
     try {
@@ -19,37 +17,35 @@ const HomePage = () => {
         method: "GET",
         credentials: "include", // Important for sending cookies
       });
-    
-      const responseTweets = await fetch("http://localhost:5000/api/posts/all", {
+      console.log("pre notif");
+      const responseNotifs = await fetch("http://localhost:5000/api/notifications/", {
         method: "GET",
         credentials: "include", // Important for sending cookies
       });
-
+      
+      console.log("post notif");
       if (!response.ok) throw new Error("Unauthorized");
 
       const data = await response.json();
-      const dataTweets = await responseTweets.json();
       setUser(data);
-      setTweets(dataTweets);
+      const dataNotifs = await responseNotifs.json();
+      setNotif(dataNotifs);
     } catch (error) {
       navigate("/login"); // Redirect if unauthorized
     }
   };
-
+  
   return (
-    <div className="homepage"> 
-      <PostTweet onTweetPosted={fetchUserDetails} /> 
+    <div className="notifications"> 
+    Notifications:
       {user ? (
         <div>
-          <p><strong>Username:</strong> {user.username}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          
+          <p><strong>Notifications for :</strong> {user.username}</p>
           <br />
           <div className="tweetbox">
-      {tweets.map((post) => (
+      {notif.map((post) => (
         <div key={post._id} >
-          <p>{post.user.fullName} @{post.user.username}</p>
-          <p>{post.text}</p>
+          <p>{post.from.username} {post.type} you</p>
         </div>
       ))}
     </div>
@@ -61,4 +57,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Notifications;

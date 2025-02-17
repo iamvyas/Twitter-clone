@@ -6,6 +6,7 @@ import SignUpPage from './pages/auth/signup/SignUpPage';
 import HandleLogout from './pages/auth/logout/LogOut';
 import SuggestedUser from './pages/suggested/SuggestedUser';
 import NavBar from './pages/navbar/NavBar';
+import Notifications from './pages/notifications/Notifications';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -18,7 +19,7 @@ function App() {
     console.log("Running useEffect - Checking Auth...");
 
     checkAuth();  
-  });
+  }, []);
   const checkAuth = async ()=> {
         try{
           console.log("fetch call check");
@@ -48,6 +49,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/logout" element={<HandleLogout />} />
         </Routes>
         </div>
